@@ -18,23 +18,62 @@ module.exports = appInfo => {
   // add your middleware config here
   config.middleware = [];
 
-  config.mysql = {
-    client: {
-      // host
-      host: '127.0.0.1',
-      // 端口号
-      port: '3306',
-      // 用户名
-      user: 'root',
-      // 密码
-      password: 'root',
-      // 数据库名
-      database: 'x_self_management',
+  // config.mysql = {
+  //   client: {
+  //     // host
+  //     host: '127.0.0.1',
+  //     // 端口号
+  //     port: '3306',
+  //     // 用户名
+  //     user: 'root',
+  //     // 密码
+  //     password: 'root',
+  //     // 数据库名
+  //     database: 'x_self_management',
+  //   },
+  //   // 是否加载到 app 上，默认开启
+  //   app: true,
+  //   // 是否加载到 agent 上，默认关闭
+  //   agent: false,
+  // };
+
+  config.sequelize = {
+    dialect: 'mysql',
+    host: '127.0.0.1',
+    port: 3306,
+    database: 'x_self_management',
+    username: 'root',
+    password: 'root',
+    // 是否自动进行下划线转换（这里是因为DB默认的命名规则是下划线方式，而我们使用的大多数是驼峰方式）
+    underscored: true,
+    // 时区，sequelize有很多自动时间的方法，都是和时区相关的，记得设置成东8区（+08:00）
+    timezone: '+08:00',
+    // define: { // https://segmentfault.com/q/1010000019835309/a-1020000019836455
+    //   raw: true,
+    //   underscored: false,
+    //   freezeTableName: true,
+    //   charset: 'utf8',
+    //   dialectOptions: {
+    //     dateStrings: true,
+    //     typeCast: true,
+    //     collate: 'utf8_general_ci',
+    //   },
+    //   timestamps: false,
+    // },
+    define: {
+      timestamps: true,
+      // paranoid: true,
+      // createdAt: 'created_at',
+      // updatedAt: 'updated_at',
+      // deletedAt: 'deleted_at',
+      underscored: true,
     },
-    // 是否加载到 app 上，默认开启
-    app: true,
-    // 是否加载到 agent 上，默认关闭
-    agent: false,
+
+    // 添加这个配置-使用sequelize操作数据库 时间格式化-https://segmentfault.com/a/1190000020009630
+    dialectOptions: {
+      dateStrings: true,
+      typeCast: true,
+    },
   };
 
   // add your user config here
