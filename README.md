@@ -31,3 +31,17 @@ $ npm stop
 
 
 [egg]: https://eggjs.org
+
+
+
+
+组件 | 描述 | 链接
+---|---|---
+egg | egg核心组建
+egg-scripts | egg项目部署工具
+moment | JavaScript 日期处理类库 | http://momentjs.cn/
+egg-mysql | egg-mysql 数据库 | https://github.com/eggjs/egg-mysql
+
+
+
+
