@@ -76,6 +76,38 @@ module.exports = appInfo => {
     },
   };
 
+
+  // token 去掉csrf验证
+  config.security = {
+    csrf: {
+      enable: false,
+      ignoreJSON: true,
+      // headerName: 'x-csrf-token', // 通过 header 传递 CSRF token 的默认字段为 x-csrf-token
+      // ignoreJSON: true,
+    },
+    // 白名单
+    // domainWhiteList: [ 'http://auth.vquery.com:7001', 'http://a.vquery.com:7001' ],
+    // withCredentials: true,
+    domainWhiteList: [
+      'http://localhost:8000',
+      'http://localhost:8080',
+      'http://localhost:7001',
+      'http://localhost:9528',
+      '.vquery.com',
+      'blog.vquery.com',
+      'http://139.199.221.174:8000',
+    ], // security whitelist, starts with '.'
+  };
+
+  // # 黑白名单 {app_root}/config/config.default.js
+  config.cors = {
+    // 'origin': 'http://auth.vquery.com:7001',
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH,OPTIONS',
+    credentials: true,
+    // 'allowHeaders': 'Origin, X-Requested-With, Content-Type, Accept',
+    // 'withCredentials': true,
+  };
+
   // add your user config here
   const userConfig = {
     // myAppName: 'egg',

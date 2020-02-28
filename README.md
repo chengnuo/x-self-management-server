@@ -42,6 +42,8 @@ egg-scripts | egg项目部署工具
 moment | JavaScript 日期处理类库 | [momentjs](http://momentjs.cn/)
 egg-mysql | egg-mysql 数据库 | [egg-mysql](https://github.com/eggjs/egg-mysql)
 egg-sequelize | Sequelize for Egg.js | [egg-sequelize](https://github.com/eggjs/egg-sequelize)
+egg-security | 解决 invalid csrf token | egg-security
+egg-cors | 解决黑白名单 | egg-cors
 
 
 

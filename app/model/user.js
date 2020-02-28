@@ -1,12 +1,12 @@
 'use strict';
 
-const moment = require('moment');
+// const moment = require('moment');
 
 module.exports = app => {
   const {
     STRING,
     INTEGER,
-    DATE,
+    // DATE,
   } = app.Sequelize;
 
   const User = app.model.define('x_user_users', {
@@ -15,7 +15,8 @@ module.exports = app => {
       primaryKey: true,
       autoIncrement: true,
     },
-    name: STRING(30),
+    name: STRING(255),
+    phone: STRING(255),
     // age: INTEGER,
     // created_at: {
     //   type: DATE,

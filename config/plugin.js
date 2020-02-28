@@ -21,3 +21,16 @@ exports.sequelize = {
   enable: true,
   package: 'egg-sequelize',
 };
+
+
+// 解决 invalid csrf token
+exports.security = {
+  enable: true,
+  package: 'egg-security',
+};
+
+// 黑白名单 {app_root}/config/plugin.js
+exports.cors = {
+  enable: true,
+  package: 'egg-cors',
+};
