@@ -1,6 +1,8 @@
 'use strict';
 
 const Controller = require('egg').Controller;
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 function toInt(str) {
   if (typeof str === 'number') return str;
@@ -70,9 +72,19 @@ class HomeController extends Controller {
     const offset = Number(ctx.request.body.offset - 1) * Number(ctx.request.body.limit) || 0; // 每页几个
 
 
+    // const name = ctx.request.body.name ? { name: { [Op.like]: `%${ctx.request.body.name}%` } } : { name: { [Op.like]: `` } }; // 模糊查询
+    // console.log('name', name)
+
+    const queryName = ctx.request.body.name || '';
     const query = {
       limit,
       offset,
+      where: {
+        // name: ctx.request.body.name || '',
+        name: {
+          [Op.like]: `%${queryName}%`,
+        },
+      },
     };
     // console.log('query', query)
     // const resItems = await ctx.model.User.findAll(query);
