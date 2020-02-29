@@ -12,4 +12,5 @@ module.exports = app => {
   router.post('/user/signOut', controller.user.signOut); // 登出
   router.post('/user/userInfo', controller.user.userInfo); // 用户信息
   router.get('/user/userInfo/:id', controller.user.userInfo); // 用户信息
+  router.post('/user/getList', controller.user.getList); // 用户列表
 };

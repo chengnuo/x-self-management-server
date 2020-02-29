@@ -58,6 +58,37 @@ class HomeController extends Controller {
     // ctx.body = 'hi, egg';
   }
 
+  // 用户列表
+  async getList() {
+    const ctx = this.ctx;
+
+
+    //  let limit = (ctx.request.body.limit-1) || 0;
+    //  let offset = limit * ctx.request.body.offset || 10;
+
+    const limit = Number(ctx.request.body.limit) || 10; // 第几页
+    const offset = Number(ctx.request.body.offset - 1) * Number(ctx.request.body.limit) || 0; // 每页几个
+
+
+    const query = {
+      limit,
+      offset,
+    };
+    // console.log('query', query)
+    // const resItems = await ctx.model.User.findAll(query);
+
+    // console.log('resItems', resItems);
+    const resData = await ctx.model.User.findAndCountAll(query);
+    // console.log('resData', resData)
+    ctx.body = {
+      data: resData.rows,
+      status: 200,
+      message: '获取列表成功',
+      total: resData.count,
+    };
+    // ctx.body = 'hi, egg';
+  }
+
 }
 
 module.exports = HomeController;

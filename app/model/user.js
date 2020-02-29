@@ -6,7 +6,7 @@ module.exports = app => {
   const {
     STRING,
     INTEGER,
-    // DATE,
+    DATE,
   } = app.Sequelize;
 
   const User = app.model.define('x_user_users', {
@@ -17,6 +17,18 @@ module.exports = app => {
     },
     name: STRING(255),
     phone: STRING(255),
+    avatarUrl: {
+      type: STRING,
+      field: 'avatar_url',
+    },
+    createdAt: {
+      type: DATE,
+      field: 'created_at',
+    },
+    updatedAt: {
+      type: DATE,
+      field: 'updated_at',
+    },
     // age: INTEGER,
     // created_at: {
     //   type: DATE,
