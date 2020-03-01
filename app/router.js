@@ -13,4 +13,7 @@ module.exports = app => {
   router.post('/user/userInfo', controller.user.userInfo); // 用户信息
   router.get('/user/userInfo/:id', controller.user.userInfo); // 用户信息
   router.post('/user/getList', controller.user.getList); // 用户列表
+  router.post('/user/create', controller.user.create); // 用户创建
+  router.post('/user/update', controller.user.update); // 用户更新
+  router.post('/user/destroy', controller.user.destroy); // 用户删除
 };

@@ -63,42 +63,149 @@ class HomeController extends Controller {
   // 用户列表
   async getList() {
     const ctx = this.ctx;
-
-
-    //  let limit = (ctx.request.body.limit-1) || 0;
-    //  let offset = limit * ctx.request.body.offset || 10;
-
     const limit = Number(ctx.request.body.limit) || 10; // 第几页
     const offset = Number(ctx.request.body.offset - 1) * Number(ctx.request.body.limit) || 0; // 每页几个
-
-
-    // const name = ctx.request.body.name ? { name: { [Op.like]: `%${ctx.request.body.name}%` } } : { name: { [Op.like]: `` } }; // 模糊查询
-    // console.log('name', name)
-
     const queryName = ctx.request.body.name || '';
     const query = {
       limit,
       offset,
       where: {
-        // name: ctx.request.body.name || '',
         name: {
           [Op.like]: `%${queryName}%`,
         },
       },
     };
-    // console.log('query', query)
-    // const resItems = await ctx.model.User.findAll(query);
 
-    // console.log('resItems', resItems);
     const resData = await ctx.model.User.findAndCountAll(query);
-    // console.log('resData', resData)
     ctx.body = {
       data: resData.rows,
       status: 200,
       message: '获取列表成功',
       total: resData.count,
     };
-    // ctx.body = 'hi, egg';
+  }
+
+  // 用户创建
+  async create() {
+    const ctx = this.ctx;
+    const {
+      name,
+      phone,
+      avatarUrl,
+    } = ctx.request.body;
+        
+    const resName = await ctx.model.User.findOne({
+      where: {
+        name,
+      },
+    });
+    const resPhone = await ctx.model.User.findOne({
+      where: {
+        phone,
+      },
+    });
+
+    if (resName && resName.id) {
+      console.log('用户名已存在')
+      ctx.body = {
+        status: 500,
+        message: '用户名已存在',
+      };
+    } else if (resPhone && resPhone.id) {
+      ctx.body = {
+        status: 500,
+        message: '电话号码已存在',
+      };
+    } else {
+      const resData = await ctx.model.User.create({
+        name,
+        phone,
+        avatarUrl,
+      });
+
+      ctx.body = {
+        data: resData,
+        status: 200,
+        message: '创建成功',
+        resName,
+      };
+    }
+  }
+
+
+  // 用户更新
+  async update() {
+    const ctx = this.ctx;
+    const {
+      name,
+      phone,
+      avatarUrl,
+      id,
+    } = ctx.request.body;
+
+    const resName = await ctx.model.User.findOne({
+      where: {
+        name,
+      },
+    });
+    const resPhone = await ctx.model.User.findOne({
+      where: {
+        phone,
+      },
+    });
+
+    if (resName && resName.id) {
+      console.log('用户名已存在')
+      ctx.body = {
+        status: 500,
+        message: '用户名已存在',
+      };
+    } else if (resPhone && resPhone.id) {
+      ctx.body = {
+        status: 500,
+        message: '电话号码已存在',
+      };
+    } else {
+      const resDataFindByPk = await ctx.model.User.findByPk(id);
+      if (!resDataFindByPk) {
+        ctx.status = 404;
+        return;
+      }
+      const resData = await resDataFindByPk.update({
+        id,
+        name,
+        phone,
+        avatarUrl,
+      });
+
+      ctx.body = {
+        status: 200,
+        message: '更新成功',
+      };
+    }
+  }
+
+  async destroy() {
+    const ctx = this.ctx;
+    const {
+      id,
+      deletedAt,
+    } = ctx.request.body;
+    
+    const resDataFindByPk = await ctx.model.User.findByPk(id);
+    if (!resDataFindByPk) {
+      ctx.status = 404;
+      return;
+    }
+    const resData = await resDataFindByPk.update({
+      id,
+      deletedAt,
+    });
+
+    ctx.body = {
+      status: 200,
+      message: '删除成功',
+    };
   }
 
 }

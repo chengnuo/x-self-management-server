@@ -29,6 +29,9 @@ module.exports = app => {
       type: DATE,
       field: 'updated_at',
     },
+    deletedAt: {
+      type: INTEGER,
+    },
     // age: INTEGER,
     // created_at: {
     //   type: DATE,
