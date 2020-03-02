@@ -11,7 +11,7 @@ class HomeController extends Controller {
     const {
       ctx,
     } = this;
-    const getData = await this.app.mysql.get('x_user_users', {
+    const getData = await this.app.mysql.get('user', {
       id: 1,
     }); // you can access to simple database instance by using app.mysql.
     console.log('getData', getData);
