@@ -11,16 +11,6 @@ function toInt(str) {
 }
 
 class HomeController extends Controller {
-  async index() {
-    const ctx = this.ctx;
-    const query = {
-      limit: toInt(ctx.query.limit),
-      offset: toInt(ctx.query.offset),
-    };
-    ctx.body = await ctx.model.User.findAll(query);
-    // ctx.body = 'hi, egg';
-  }
-  
   // 登录
   async signIn() {
     const ctx = this.ctx;
@@ -29,16 +19,13 @@ class HomeController extends Controller {
       offset: toInt(ctx.query.offset),
     };
     const resData = await ctx.model.User.findAll(query);
-
     ctx.body = {
       data: resData,
       status: 200,
       message: '登录成功',
       token: 'jiade',
     };
-    // ctx.body = 'hi, egg';
   }
-
   // 登出
   async signOut() {
     const ctx = this.ctx;
@@ -47,25 +34,13 @@ class HomeController extends Controller {
       offset: toInt(ctx.query.offset),
     };
     ctx.body = await ctx.model.User.findAll(query);
-    // ctx.body = 'hi, egg';
   }
-
-  // 用户信息
-  async userInfo() {
-    const ctx = this.ctx;
-    const query = {
-     
-    };
-    ctx.body = await ctx.model.User.findByPk(toInt(ctx.params.id));
-    // ctx.body = 'hi, egg';
-  }
-
   // 用户列表
-  async getList() {
+  async index() {
     const ctx = this.ctx;
-    const limit = Number(ctx.request.body.limit) || 10; // 第几页
-    const offset = Number(ctx.request.body.offset - 1) * Number(ctx.request.body.limit) || 0; // 每页几个
-    const queryName = ctx.request.body.name || '';
+    const limit = Number(ctx.query.limit) || 10; // 第几页
+    const offset = Number(ctx.query.offset - 1) * Number(ctx.query.limit) || 0; // 每页几个
+    const queryName = ctx.query.name || '';
     const query = {
       limit,
       offset,
@@ -75,7 +50,6 @@ class HomeController extends Controller {
         },
       },
     };
-
     const resData = await ctx.model.User.findAndCountAll(query);
     ctx.body = {
       data: resData.rows,
@@ -84,8 +58,17 @@ class HomeController extends Controller {
       total: resData.count,
     };
   }
-
-  // 用户创建
+  // 详情
+  async show() {
+    const ctx = this.ctx;
+    const resDataFindByPk = await ctx.model.User.findByPk(ctx.params.id);
+    ctx.body = {
+      data: resDataFindByPk,
+      status: 200,
+      message: '获取详情成功',
+    };
+  }
+  // 创建
   async create() {
     const ctx = this.ctx;
     const {
@@ -93,25 +76,12 @@ class HomeController extends Controller {
       phone,
       avatarUrl,
     } = ctx.request.body;
-        
-    const resName = await ctx.model.User.findOne({
-      where: {
-        name,
-      },
-    });
     const resPhone = await ctx.model.User.findOne({
       where: {
         phone,
       },
     });
-
-    if (resName && resName.id) {
-      console.log('用户名已存在')
-      ctx.body = {
-        status: 500,
-        message: '用户名已存在',
-      };
-    } else if (resPhone && resPhone.id) {
+    if (resPhone && resPhone.id) {
       ctx.body = {
         status: 500,
         message: '电话号码已存在',
@@ -122,18 +92,14 @@ class HomeController extends Controller {
         phone,
         avatarUrl,
       });
-
       ctx.body = {
         data: resData,
         status: 200,
         message: '创建成功',
-        resName,
       };
     }
   }
-
-
-  // 用户更新
+  // 更新
   async update() {
     const ctx = this.ctx;
     const {
@@ -142,72 +108,45 @@ class HomeController extends Controller {
       avatarUrl,
       id,
     } = ctx.request.body;
-
-    const resName = await ctx.model.User.findOne({
-      where: {
-        name,
-      },
-    });
-    const resPhone = await ctx.model.User.findOne({
-      where: {
-        phone,
-      },
-    });
-
-    if (resName && resName.id) {
-      console.log('用户名已存在')
-      ctx.body = {
-        status: 500,
-        message: '用户名已存在',
-      };
-    } else if (resPhone && resPhone.id) {
-      ctx.body = {
-        status: 500,
-        message: '电话号码已存在',
-      };
-    } else {
-      const resDataFindByPk = await ctx.model.User.findByPk(id);
-      if (!resDataFindByPk) {
-        ctx.status = 404;
-        return;
-      }
-      const resData = await resDataFindByPk.update({
-        id,
-        name,
-        phone,
-        avatarUrl,
-      });
-
-      ctx.body = {
-        status: 200,
-        message: '更新成功',
-      };
+    const resDataFindByPk = await ctx.model.User.findByPk(id);
+    if (!resDataFindByPk) {
+      ctx.status = 404;
+      return;
     }
-  }
+    await resDataFindByPk.update({
+      id,
+      name,
+      phone,
+      avatarUrl,
+    });
 
+    ctx.body = {
+      status: 200,
+      message: '更新成功',
+    };
+    
+  }
+  // 删除，逻辑更新
   async destroy() {
     const ctx = this.ctx;
     const {
       id,
       deletedAt,
     } = ctx.request.body;
-    
     const resDataFindByPk = await ctx.model.User.findByPk(id);
     if (!resDataFindByPk) {
       ctx.status = 404;
       return;
     }
-    const resData = await resDataFindByPk.update({
+    await resDataFindByPk.update({
       id,
       deletedAt,
     });
-
     ctx.body = {
       status: 200,
       message: '删除成功',
     };
   }
-
 }
 
 module.exports = HomeController;
