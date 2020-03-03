@@ -22,7 +22,7 @@ class HomeController extends Controller {
 
     const query = {
       attributes: {
-        exclude: [ 'password' ],
+        exclude: ['password'],
       },
       where: {
         name: username,
@@ -47,7 +47,7 @@ class HomeController extends Controller {
       overwrite: true,
       signed: false,
     });
-    
+
     ctx.body = {
       data: resData,
       status: 200,
@@ -58,11 +58,31 @@ class HomeController extends Controller {
   // 登出
   async signOut() {
     const ctx = this.ctx;
-    const query = {
-      limit: toInt(ctx.query.limit),
-      offset: toInt(ctx.query.offset),
-    };
-    ctx.body = await ctx.model.User.findAll(query);
+    if (ctx.request.header.authorization) {
+      let token = ctx.request.header.authorization.split(' ')[1];
+      const query = {
+        attributes: {
+          exclude: ['password'],
+        },
+        where: {
+          token,
+        },
+      }
+      const resData = await ctx.model.User.findOne(query);
+      const resDataUpdate = await resData.update({
+        id: resData.id,
+        token: '',
+      });
+      ctx.body = {
+        status: 200,
+        message: '登出成功',
+      };
+    } else {
+      ctx.body = {
+        status: 401,
+        message: '没有可用的token',
+      };
+    }
   }
   // 用户列表
   async index() {
@@ -74,7 +94,7 @@ class HomeController extends Controller {
       limit,
       offset,
       attributes: {
-        exclude: [ 'password' ],
+        exclude: ['password'],
       },
       where: {
         name: {
