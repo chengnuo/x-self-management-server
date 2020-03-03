@@ -3,6 +3,7 @@
 const Controller = require('egg').Controller;
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const jwt = require('jsonwebtoken');
 
 function toInt(str) {
   if (typeof str === 'number') return str;
@@ -14,16 +15,44 @@ class HomeController extends Controller {
   // 登录
   async signIn() {
     const ctx = this.ctx;
+    const {
+      username,
+      password,
+    } = ctx.request.body;
+
     const query = {
-      limit: toInt(ctx.query.limit),
-      offset: toInt(ctx.query.offset),
-    };
-    const resData = await ctx.model.User.findAll(query);
+      attributes: {
+        exclude: [ 'password' ],
+      },
+      where: {
+        name: username,
+        password,
+      },
+    }
+    const resData = await ctx.model.User.findOne(query);
+
+    const token = jwt.sign({
+      userId: resData.id,
+      username: resData.name,
+    }, ctx.app.config.jwt.secret, {
+      expiresIn: '60s', // 时间根据自己定，具体可参考jsonwebtoken插件官方说明
+    });
+    const resDataUpdate = await resData.update({
+      id: resData.id,
+      token,
+    });
+    this.ctx.cookies.set('token', token, {
+      maxAge: 60 * 1000,
+      httpOnly: false,
+      overwrite: true,
+      signed: false,
+    });
+    
     ctx.body = {
       data: resData,
       status: 200,
       message: '登录成功',
-      token: 'jiade',
+      token,
     };
   }
   // 登出
@@ -44,6 +73,9 @@ class HomeController extends Controller {
     const query = {
       limit,
       offset,
+      attributes: {
+        exclude: [ 'password' ],
+      },
       where: {
         name: {
           [Op.like]: `%${queryName}%`,
@@ -124,7 +156,7 @@ class HomeController extends Controller {
       status: 200,
       message: '更新成功',
     };
-    
+
   }
   // 删除，逻辑更新
   async destroy() {

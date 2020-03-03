@@ -17,6 +17,8 @@ module.exports = app => {
     },
     name: STRING(255),
     phone: STRING(255),
+    password: STRING(255),
+    token: STRING(255),
     avatarUrl: {
       type: STRING,
       field: 'avatar_url',

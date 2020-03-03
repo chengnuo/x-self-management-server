@@ -37,6 +37,11 @@ module.exports = appInfo => {
   //   agent: false,
   // };
 
+  // jwt 自我管理 - https://www.cmd5.com/
+  config.jwt = {
+    secret: '9057f282255bbe2a5a9c7e0da259eb67',
+  };
+
   config.sequelize = {
     dialect: 'mysql',
     host: '127.0.0.1',
