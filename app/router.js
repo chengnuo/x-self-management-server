@@ -5,6 +5,7 @@
  */
 module.exports = app => {
   const { router, controller } = app;
+  const checktoken = app.middleware.checktoken();
   router.get('/', controller.home.index);
   router.get('/api/home/homeGetData', controller.home.homeGetData);
   // router.get('/user', controller.user.index);
@@ -16,5 +17,5 @@ module.exports = app => {
   // router.post('/user/create', controller.user.create); // 用户创建
   // router.post('/user/update', controller.user.update); // 用户更新
   // router.post('/user/destroy', controller.user.destroy); // 用户删除
-  router.resources('user', '/api/user', controller.user);
+  router.resources('user', '/api/user', checktoken, controller.user);
 };
