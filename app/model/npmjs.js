@@ -16,7 +16,7 @@ module.exports = app => {
       autoIncrement: true,
     },
     name: STRING(255),
-    description: STRING(255),
+    description: STRING(10000),
     url: STRING(255),
     createdAt: {
       type: DATE,
