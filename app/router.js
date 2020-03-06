@@ -18,4 +18,5 @@ module.exports = app => {
   // router.post('/user/update', controller.user.update); // 用户更新
   // router.post('/user/destroy', controller.user.destroy); // 用户删除
   router.resources('user', '/api/user', checktoken, controller.user);
+  router.resources('npmjs', '/api/npmjs', checktoken, controller.npmjs);
 };
