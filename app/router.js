@@ -19,4 +19,5 @@ module.exports = app => {
   // router.post('/user/destroy', controller.user.destroy); // 用户删除
   router.resources('user', '/api/user', checktoken, controller.user);
   router.resources('npmjs', '/api/npmjs', checktoken, controller.npmjs);
+  router.resources('project', '/api/project', checktoken, controller.project);
 };
