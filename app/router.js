@@ -17,7 +17,8 @@ module.exports = app => {
   // router.post('/user/create', controller.user.create); // 用户创建
   // router.post('/user/update', controller.user.update); // 用户更新
   // router.post('/user/destroy', controller.user.destroy); // 用户删除
-  router.resources('user', '/api/user', checktoken, controller.user);
-  router.resources('npmjs', '/api/npmjs', checktoken, controller.npmjs);
-  router.resources('project', '/api/project', checktoken, controller.project);
+  router.resources('user', '/api/user', checktoken, controller.user); // 用户
+  router.resources('npmjs', '/api/npmjs', checktoken, controller.npmjs); // npmjs包管理
+  router.resources('project', '/api/project', checktoken, controller.project); // 项目管理
+  router.resources('foot', '/api/foot', checktoken, controller.foot); // 美食
 };
