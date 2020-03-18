@@ -11,7 +11,7 @@
  Target Server Version : 50720
  File Encoding         : utf-8
 
- Date: 03/15/2020 02:17:36 AM
+ Date: 03/19/2020 04:40:38 AM
 */
 
 SET NAMES utf8;
@@ -35,6 +35,50 @@ CREATE TABLE `access` (
   `icon` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '小图标',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=62 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- ----------------------------
+--  Table structure for `foot`
+-- ----------------------------
+DROP TABLE IF EXISTS `foot`;
+CREATE TABLE `foot` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户唯一索引',
+  `name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `description` varchar(10000) DEFAULT NULL COMMENT '描述',
+  `url` varchar(255) DEFAULT NULL COMMENT '地址',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted_at` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `foot`
+-- ----------------------------
+BEGIN;
+INSERT INTO `foot` VALUES ('25', '绿茶', '绿茶1', 'http://www.baidu.com', '2020-03-16 09:13:06', '2020-03-19 04:36:04', '0'), ('26', '椰客', '海南椰子鸡，暂无介绍。', 'https://www.sohu.com/a/141830263_694786', '2020-03-16 09:21:30', '2020-03-16 09:21:30', '0'), ('27', '测试', '# 测试\n\n```\n  你好啊，我是莎莉娜\n```\n\n测试\n\n### 你好', 'http://www.baidu.com', '2020-03-17 12:30:02', '2020-03-18 15:54:03', '0');
+COMMIT;
+
+-- ----------------------------
+--  Table structure for `healthMedicine`
+-- ----------------------------
+DROP TABLE IF EXISTS `healthMedicine`;
+CREATE TABLE `healthMedicine` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户唯一索引',
+  `name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `description` varchar(10000) DEFAULT NULL COMMENT '描述',
+  `url` varchar(255) DEFAULT NULL COMMENT '地址',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted_at` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `healthMedicine`
+-- ----------------------------
+BEGIN;
+INSERT INTO `healthMedicine` VALUES ('25', '绿茶', '### 绿茶112121', 'http://www.baidu.com', '2020-03-16 09:13:06', '2020-03-19 04:39:08', '0');
+COMMIT;
 
 -- ----------------------------
 --  Table structure for `npmjs`

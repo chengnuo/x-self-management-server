@@ -21,4 +21,5 @@ module.exports = app => {
   router.resources('npmjs', '/api/npmjs', checktoken, controller.npmjs); // npmjs包管理
   router.resources('project', '/api/project', checktoken, controller.project); // 项目管理
   router.resources('foot', '/api/foot', checktoken, controller.foot); // 美食
+  router.resources('healthMedicine', '/api/healthMedicine', checktoken, controller.healthMedicine); // 健康医药
 };
