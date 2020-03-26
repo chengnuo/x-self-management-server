@@ -22,4 +22,5 @@ module.exports = app => {
   router.resources('project', '/api/project', checktoken, controller.project); // 项目管理
   router.resources('foot', '/api/foot', checktoken, controller.foot); // 美食
   router.resources('healthMedicine', '/api/healthMedicine', checktoken, controller.healthMedicine); // 健康医药
+  router.resources('softwareTest', '/api/softwareTest', checktoken, controller.softwareTest); // 软件考试
 };
