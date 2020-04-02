@@ -20,16 +20,12 @@ class HomeController extends Controller {
     const queryName = ctx.query.name || '';
 
 
-    console.log(`token================`, ctx.request.header.authorization.split(' ')[1])
     if (ctx.request.header.authorization) {
       const userToken = await ctx.model.User.findOne({
         where: {
           token: ctx.request.header.authorization.split(' ')[1],
         },
       });
-
-      console.log(`userToken================`, userToken.id)
-
       const query = {
         limit,
         offset,
@@ -78,27 +74,41 @@ class HomeController extends Controller {
       url,
     } = ctx.request.body;
 
-
-    const resName = await ctx.model.Npmjs.findOne({
-      where: {
-        name,
-      },
-    });
-    if (resName && resName.id) {
-      ctx.body = {
-        status: 500,
-        message: 'npmjs名称已存在',
-      };
-    } else {
-      const resData = await ctx.model.Npmjs.create({
-        name,
-        description,
-        url,
+    if (ctx.request.header.authorization) {
+      const userToken = await ctx.model.User.findOne({
+        where: {
+          token: ctx.request.header.authorization.split(' ')[1],
+        },
       });
+
+
+      const resName = await ctx.model.Npmjs.findOne({
+        where: {
+          name,
+        },
+      });
+      if (resName && resName.id) {
+        ctx.body = {
+          status: 500,
+          message: 'npmjs名称已存在',
+        };
+      } else {
+        const resData = await ctx.model.Npmjs.create({
+          name,
+          description,
+          url,
+          userId: userToken.id,
+        });
+        ctx.body = {
+          data: resData,
+          status: 200,
+          message: '创建成功',
+        };
+      }
+    } else {
       ctx.body = {
-        data: resData,
-        status: 200,
-        message: '创建成功',
+        status: 401,
+        message: '没有可用的token',
       };
     }
   }
