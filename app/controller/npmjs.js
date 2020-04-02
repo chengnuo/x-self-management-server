@@ -18,27 +18,46 @@ class HomeController extends Controller {
     const limit = Number(ctx.query.limit) || 10; // 第几页
     const offset = Number(ctx.query.offset - 1) * Number(ctx.query.limit) || 0; // 每页几个
     const queryName = ctx.query.name || '';
-    const query = {
-      limit,
-      offset,
-      attributes: {
-        exclude: ['password'],
-      },
-      where: {
-        name: {
-          [Op.like]: `%${queryName}%`,
+
+
+    console.log(`token================`, ctx.request.header.authorization.split(' ')[1])
+    if (ctx.request.header.authorization) {
+      const userToken = await ctx.model.User.findOne({
+        where: {
+          token: ctx.request.header.authorization.split(' ')[1],
         },
-      },
-    };
-    const resData = await ctx.model.Npmjs.findAndCountAll(query);
-    ctx.body = {
-      data: {
-        list: resData.rows,
-        total: resData.count,
-      },
-      status: 200,
-      message: '获取列表成功',
-    };
+      });
+
+      console.log(`userToken================`, userToken.id)
+
+      const query = {
+        limit,
+        offset,
+        attributes: {
+          exclude: [`password`],
+        },
+        where: {
+          user_id: `${userToken.id}`,
+          name: {
+            [Op.like]: `%${queryName}%`,
+          },
+        },
+      };
+      const resData = await ctx.model.Npmjs.findAndCountAll(query);
+      ctx.body = {
+        data: {
+          list: resData.rows,
+          total: resData.count,
+        },
+        status: 200,
+        message: '获取列表成功',
+      };
+    } else {
+      ctx.body = {
+        status: 401,
+        message: '没有可用的token',
+      };
+    }
   }
   // 详情
   async show() {

@@ -18,6 +18,10 @@ module.exports = app => {
     name: STRING(255),
     description: STRING(10000),
     url: STRING(255),
+    userId: {
+      type: INTEGER,
+      field: 'user_id',
+    },
     createdAt: {
       type: DATE,
       field: 'created_at',
