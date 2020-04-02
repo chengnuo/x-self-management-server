@@ -22,15 +22,31 @@ class HomeController extends Controller {
 
     const query = {
       attributes: {
-        exclude: ['password'],
+        // exclude: ['password'],
       },
       where: {
         name: username,
-        password,
+        // password,
       },
     }
     const resData = await ctx.model.User.findOne(query);
-
+    console.log('resData', resData)
+    if (resData === null) {
+      ctx.body = {
+        data: {},
+        status: 500,
+        message: '用户不存在',
+      };
+      return false;
+    } else if (resData && resData.password !== password) {
+      console.log('resData.password', resData.password, password)
+      ctx.body = {
+        data: {},
+        status: 500,
+        message: '密码错误',
+      };
+      return false;
+    }
     const token = jwt.sign({
       userId: resData.id,
       username: resData.name,
@@ -49,11 +65,19 @@ class HomeController extends Controller {
     });
 
     ctx.body = {
-      data: resData,
+      data: {
+        id: resData.id,
+        name: resData.name,
+        phone: resData.phone,
+        createdAt: resData.createdAt,
+        updatedAt: resData.updatedAt,
+        avatarUrl: resData.avatarUrl,
+      },
       status: 200,
       message: '登录成功',
       token,
     };
+
   }
   // 登出
   async signOut() {

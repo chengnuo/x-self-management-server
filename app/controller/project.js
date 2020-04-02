@@ -12,78 +12,6 @@ function toInt(str) {
 }
 
 class HomeController extends Controller {
-  // 登录
-  async signIn() {
-    const ctx = this.ctx;
-    const {
-      username,
-      password,
-    } = ctx.request.body;
-
-    const query = {
-      attributes: {
-        exclude: ['password'],
-      },
-      where: {
-        name: username,
-        password,
-      },
-    }
-    const resData = await ctx.model.Project.findOne(query);
-
-    const token = jwt.sign({
-      userId: resData.id,
-      username: resData.name,
-    }, ctx.app.config.jwt.secret, {
-      expiresIn: '60s', // 时间根据自己定，具体可参考jsonwebtoken插件官方说明
-    });
-    const resDataUpdate = await resData.update({
-      id: resData.id,
-      token,
-    });
-    this.ctx.cookies.set('token', token, {
-      maxAge: 60 * 1000,
-      httpOnly: false,
-      overwrite: true,
-      signed: false,
-    });
-
-    ctx.body = {
-      data: resData,
-      status: 200,
-      message: '登录成功',
-      token,
-    };
-  }
-  // 登出
-  async signOut() {
-    const ctx = this.ctx;
-    if (ctx.request.header.authorization) {
-      let token = ctx.request.header.authorization.split(' ')[1];
-      const query = {
-        attributes: {
-          exclude: ['password'],
-        },
-        where: {
-          token,
-        },
-      }
-      const resData = await ctx.model.Project.findOne(query);
-      const resDataUpdate = await resData.update({
-        id: resData.id,
-        token: '',
-      });
-      ctx.body = {
-        status: 200,
-        message: '登出成功',
-      };
-    } else {
-      ctx.body = {
-        status: 401,
-        message: '没有可用的token',
-      };
-    }
-  }
   // 用户列表
   async index() {
     const ctx = this.ctx;
@@ -104,10 +32,12 @@ class HomeController extends Controller {
     };
     const resData = await ctx.model.Project.findAndCountAll(query);
     ctx.body = {
-      data: resData.rows,
+      data: {
+        list: resData.rows,
+        total: resData.count,
+      },
       status: 200,
       message: '获取列表成功',
-      total: resData.count,
     };
   }
   // 详情
